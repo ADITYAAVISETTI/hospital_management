@@ -419,6 +419,11 @@ function renderHeader() {
   if (!slot) return;
   const page = document.body.dataset.page;
   const user = Session.token ? Session.user : null;
+  // Signed-in users always get a visible way back to their dashboard / portal.
+  const home = user && homeFor(user.role);
+  const links = user
+    ? [...NAV, [home, user.role === 'patient' ? 'My Portal' : 'Dashboard', home.replace('.html', '')]]
+    : NAV;
 
   const account = user
     ? `<div class="user-menu">
@@ -450,7 +455,7 @@ function renderHeader() {
         ${brandHtml()}
         <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false"><i class="ri-menu-line"></i></button>
         <nav class="main-nav" aria-label="Main">
-          ${NAV.map(([href, label, key]) => `<a href="${href}" class="${page === key ? 'active' : ''}">${label}</a>`).join('')}
+          ${links.map(([href, label, key]) => `<a href="${href}" class="${page === key ? 'active' : ''}">${label}</a>`).join('')}
         </nav>
         <div class="header-actions">
           ${!user || user.role === 'patient' ? '<a class="btn btn-primary btn-sm btn-book-header" href="book.html"><i class="ri-calendar-check-line"></i>Book Now</a>' : ''}

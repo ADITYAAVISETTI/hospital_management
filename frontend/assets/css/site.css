@@ -116,28 +116,29 @@ ul { padding-left: 1.2em; }
 .topbar-emergency i { color: #ff8a80; }
 
 .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255, 255, 255, 0.97); border-bottom: 1px solid var(--border); backdrop-filter: saturate(1.2) blur(6px); }
-.site-header .container { display: flex; align-items: center; gap: 24px; min-height: 72px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none !important; }
+.site-header .container { display: flex; align-items: center; gap: 20px; min-height: 72px; }
+.brand { flex-shrink: 0; display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none !important; }
 .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; display: grid; place-items: center; font-size: 1.4rem; }
 .brand-name { font: 800 1.2rem/1 var(--font-head); letter-spacing: -0.01em; }
 .brand-name small { display: block; font: 500 0.7rem/1.4 var(--font); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
 
-.main-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
-.main-nav a { color: var(--text-2); font-weight: 500; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px; text-decoration: none; }
+.main-nav { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+.main-nav a { white-space: nowrap; color: var(--text-2); font-weight: 500; font-size: 0.95rem; padding: 8px 11px; border-radius: 8px; text-decoration: none; }
 .main-nav a:hover { background: var(--bg-soft); color: var(--text); }
 .main-nav a.active { color: var(--primary); background: var(--primary-50); }
-.header-actions { display: flex; align-items: center; gap: 10px; }
+.header-actions { flex-shrink: 0; display: flex; align-items: center; gap: 10px; }
 .nav-toggle { display: none; background: none; border: 1px solid var(--border); border-radius: 8px; width: 42px; height: 42px; font-size: 1.4rem; color: var(--text); cursor: pointer; }
 
 .user-menu { position: relative; }
 .user-menu-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px 4px 4px; cursor: pointer; font: 500 0.9rem var(--font); color: var(--text); }
+.user-menu-btn .nowrap { display: inline-block; max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
 .user-menu-list { position: absolute; right: 0; top: calc(100% + 8px); min-width: 210px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 6px; display: none; }
 .user-menu.open .user-menu-list { display: block; }
 .user-menu-list a, .user-menu-list button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border-radius: 8px; color: var(--text); background: none; border: 0; font: 500 0.92rem var(--font); cursor: pointer; text-decoration: none; text-align: left; }
 .user-menu-list a:hover, .user-menu-list button:hover { background: var(--bg-soft); }
 .user-menu-list .role-label { padding: 8px 12px 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 
-@media (max-width: 1040px) {
+@media (max-width: 1180px) {
   .nav-toggle { display: inline-grid; place-items: center; margin-left: auto; }
   .main-nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: #fff; flex-direction: column; align-items: stretch; padding: 12px 20px 20px; border-bottom: 1px solid var(--border); box-shadow: var(--shadow); margin: 0; }
   .main-nav.open { display: flex; }

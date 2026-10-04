@@ -7,10 +7,12 @@ try {
 }
 
 const dp = { all: [], day: todayStr(), profile: null };
+const TABS = ['day', 'upcoming', 'history', 'profile'];
 
 function showTab(tab) {
   $$('.dash-nav [data-tab]').forEach((b) => b.classList.toggle('active', b.dataset.tab === tab));
   $$('[data-view]').forEach((v) => v.classList.toggle('hidden', v.dataset.view !== tab));
+  history.replaceState(null, '', `doctor-portal.html#${tab}`);
   window.scrollTo(0, 0);
 }
 
@@ -313,6 +315,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!me) return;
   $('#dash-user').innerHTML = `${avatar(me.name)}<div><strong>${esc(me.name)}</strong><small>Doctor</small></div>`;
   $$('.dash-nav [data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  const initial = location.hash.slice(1);
+  if (TABS.includes(initial)) showTab(initial);
 
   const setDay = (d) => {
     dp.day = d;
