@@ -11,6 +11,8 @@ const SITE = {
   email: 'care@citycare.test',
   address: 'Plot 21, Health City Road, Banjara Hills, Hyderabad 500034',
   opdHours: 'Mon–Sat, 9:00 AM – 7:00 PM',
+  // Keep in step with HOSPITAL_TZ in backend/.env (default Asia/Kolkata).
+  timeZone: 'Asia/Kolkata',
 };
 
 // The backend normally serves these pages itself (http://localhost:3000), so the
@@ -46,8 +48,28 @@ function parseDate(str) {
   const [y, m, d] = str.split('-').map(Number);
   return new Date(y, m - 1, d);
 }
+/**
+ * The current hospital wall-clock time as a local Date, so "today" and past
+ * slots match the server even when the visitor's computer is in another timezone.
+ */
+function hospitalNow() {
+  try {
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat('en-US', {
+        timeZone: SITE.timeZone,
+        hourCycle: 'h23',
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric',
+      })
+        .formatToParts(new Date())
+        .map((p) => [p.type, p.value])
+    );
+    return new Date(+parts.year, parts.month - 1, +parts.day, +parts.hour, +parts.minute, +parts.second);
+  } catch {
+    return new Date(); // very old browser without timezone support
+  }
+}
 function todayStr() {
-  return toDateStr(new Date());
+  return toDateStr(hospitalNow());
 }
 function addDays(str, n) {
   const d = parseDate(str);
@@ -68,7 +90,7 @@ function fmtMoney(n) {
   return `₹${Number(n || 0).toLocaleString('en-IN')}`;
 }
 function isPastSlot(date, time) {
-  const now = new Date();
+  const now = hospitalNow();
   const [h, m] = time.split(':').map(Number);
   const d = parseDate(date);
   d.setHours(h, m, 0, 0);
@@ -77,7 +99,7 @@ function isPastSlot(date, time) {
 function age(dob) {
   if (!dob) return '';
   const b = parseDate(dob);
-  const n = new Date();
+  const n = hospitalNow();
   let a = n.getFullYear() - b.getFullYear();
   if (n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) a -= 1;
   return a;
@@ -619,7 +641,7 @@ function patientReportsModal(patient) {
             <span class="file-icon ${r.mimeType === 'application/pdf' ? '' : 'img'}"><i class="${r.mimeType === 'application/pdf' ? 'ri-file-pdf-2-line' : 'ri-image-line'}"></i></span>
             <div class="grow"><div class="cell-main">${esc(r.title)}</div><div class="cell-sub">${esc(fmtDate(r.reportDate))} · ${esc(REPORT_CATEGORIES[r.category] || r.category)} · ${esc(fmtSize(r.size))} · by ${esc(r.uploadedByName || '—')}</div></div>
             <button type="button" class="btn btn-ghost btn-sm" data-dl="${esc(r.id)}" data-name="${esc(r.fileName)}" title="Download"><i class="ri-download-2-line"></i></button>
-            ${me.role === 'admin' || r.uploadedByName === me.name ? `<button type="button" class="btn btn-ghost btn-sm" data-del="${esc(r.id)}" title="Delete" style="color:var(--danger)"><i class="ri-delete-bin-line"></i></button>` : ''}
+            ${me.role === 'admin' || (r.uploadedBy && String(r.uploadedBy) === String(me.id)) ? `<button type="button" class="btn btn-ghost btn-sm" data-del="${esc(r.id)}" title="Delete" style="color:var(--danger)"><i class="ri-delete-bin-line"></i></button>` : ''}
           </div>`
             )
             .join('')

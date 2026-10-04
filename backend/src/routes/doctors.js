@@ -18,7 +18,7 @@ const isSelf = (req, doc) => Boolean(req.user && req.user.role === 'doctor' && d
 /** Average rating per doctor from visible patient feedback. */
 async function ratingsFor(doctorIds) {
   const rows = await Appointment.aggregate([
-    { $match: { doctor: { $in: doctorIds }, 'feedback.rating': { $exists: true } } },
+    { $match: { doctor: { $in: doctorIds }, 'feedback.rating': { $exists: true }, 'feedback.hidden': { $ne: true } } },
     { $group: { _id: '$doctor', avg: { $avg: '$feedback.rating' }, count: { $sum: 1 } } },
   ]);
   return new Map(rows.map((r) => [String(r._id), { average: Math.round(r.avg * 10) / 10, count: r.count }]));

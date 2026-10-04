@@ -25,6 +25,7 @@ function format(r) {
     fileName: r.fileName,
     mimeType: r.mimeType,
     size: r.size,
+    uploadedBy: r.uploadedBy || null,
     uploadedByName: r.uploadedByName,
     createdAt: r.createdAt,
   };

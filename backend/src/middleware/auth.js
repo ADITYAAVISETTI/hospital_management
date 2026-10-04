@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const User = require('../models/User');
+const Doctor = require('../models/Doctor');
 const { unauthorized, forbidden } = require('../utils/httpError');
 
 function signToken(user) {
@@ -13,6 +14,15 @@ function readToken(req) {
   const header = req.get('authorization') || '';
   const [scheme, token] = header.split(' ');
   return scheme === 'Bearer' && token ? token : null;
+}
+
+/** Doctors whose profile an admin has deactivated may not sign in. */
+async function assertCanSignIn(user) {
+  if (user.role !== 'doctor') return;
+  const doctor = await Doctor.findOne({ user: user._id }).select('active').lean();
+  if (!doctor || !doctor.active) {
+    throw unauthorized('Your doctor account has been deactivated. Please contact the hospital administration.');
+  }
 }
 
 async function loadUser(token) {
@@ -30,6 +40,7 @@ async function loadUser(token) {
   if (user.passwordChangedAt && payload.iat < Math.floor(user.passwordChangedAt.getTime() / 1000)) {
     throw unauthorized('Your password was changed. Please log in again.');
   }
+  await assertCanSignIn(user);
   return user;
 }
 
@@ -62,4 +73,4 @@ function requireRole(...roles) {
   };
 }
 
-module.exports = { signToken, authenticate, optionalAuth, requireRole };
+module.exports = { signToken, authenticate, optionalAuth, requireRole, assertCanSignIn };

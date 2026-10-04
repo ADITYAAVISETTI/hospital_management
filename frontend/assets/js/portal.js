@@ -17,8 +17,9 @@ const portal = {
 };
 
 const isUpcoming = (a) => a.status === 'scheduled' && !isPastSlot(a.date, a.time);
+// "For <name>" chip on visits booked for a family member (not on the viewer's own visits).
 const forWhom = (a) =>
-  a.patient && a.patient.isDependant
+  a.patient && a.patient.isDependant && String(a.patient.id) !== String(user.id)
     ? `<span class="for-chip"><i class="ri-user-heart-line"></i>For ${esc(a.patient.name)}${a.patient.relation ? ` · ${esc(RELATION_LABELS[a.patient.relation] || '')}` : ''}</span>`
     : '';
 
@@ -429,8 +430,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
   );
   $('#add-member').addEventListener('click', () => memberForm());
+  // Family members who were given their own login are managed by their guardian
+  // and can't add family members themselves.
+  if (user.guardian) $('.dash-nav [data-tab="family"]').classList.add('hidden');
   const initial = location.hash.slice(1);
-  if (TABS.includes(initial)) showTab(initial);
+  if (TABS.includes(initial) && !(initial === 'family' && user.guardian)) showTab(initial);
 
   // Profile
   const profileForm = $('#profile-form');

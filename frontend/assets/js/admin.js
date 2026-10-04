@@ -658,6 +658,7 @@ function leaveManager(d) {
   const form = $('#lv-form', m.el);
   form.from.addEventListener('change', () => {
     if (!form.to.value || form.to.value < form.from.value) form.to.value = form.from.value;
+    form.to.min = form.from.value;
   });
   $('[data-close]', m.el).addEventListener('click', m.close);
   const refresh = async () => {
@@ -865,7 +866,8 @@ async function loadCheckups() {
   const box = $('#chk-box');
   box.innerHTML = loaderHtml();
   try {
-    if (A.chkFilter === 'packages') return renderPackages(box);
+    // `await` so a failure shows in the error box below instead of a stuck spinner.
+    if (A.chkFilter === 'packages') return await renderPackages(box);
     const list = await api(`/packages/bookings${A.chkFilter ? `?status=${A.chkFilter}` : ''}`);
     if (A.chkFilter === 'requested') setBadge('#chk-count', list.length);
     box.innerHTML = list.length
@@ -888,6 +890,10 @@ async function loadCheckups() {
     $$('[data-chk-status]', box).forEach((sel) => {
       const original = sel.value;
       sel.addEventListener('change', async () => {
+        if (sel.value === 'cancelled' && !(await confirmDialog('Cancel this check-up booking? The patient will be emailed.', { title: 'Cancel check-up', confirmText: 'Yes, cancel', danger: true }))) {
+          sel.value = original;
+          return;
+        }
         try {
           await api(`/packages/bookings/${sel.dataset.chkStatus}/status`, { method: 'PATCH', body: { status: sel.value } });
           toast(sel.value === 'confirmed' ? 'Confirmed. The patient has been emailed.' : 'Status updated.', 'success');

@@ -260,8 +260,9 @@ function openConsult(id) {
         <div class="field full"><label for="c-rx">Prescription</label><textarea id="c-rx" name="prescription" maxlength="4000" rows="5" placeholder="e.g.&#10;1. Tab. Paracetamol 500 mg, 1-0-1 after food, 3 days&#10;2. Review after 1 week">${esc(a.prescription)}</textarea><span class="hint">Visible to the patient and printed on their slip.</span></div>
         <div class="field full"><label for="c-notes">Private notes</label><textarea id="c-notes" name="doctorNotes" maxlength="4000" rows="2">${esc(a.doctorNotes)}</textarea><span class="hint">Only visible to doctors and hospital staff.</span></div>
       </form>`,
+    // A visit the patient has rated must stay completed (the server enforces this too).
     footer: `
-      <button type="button" class="btn btn-ghost" data-status="no-show">Mark no-show</button>
+      ${a.feedback ? '' : '<button type="button" class="btn btn-ghost" data-status="no-show">Mark no-show</button>'}
       <button type="button" class="btn btn-primary" data-status="completed"><i class="ri-check-line"></i>Save &amp; complete</button>`,
   });
 

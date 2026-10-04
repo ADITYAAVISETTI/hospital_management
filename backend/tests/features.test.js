@@ -500,3 +500,128 @@ describe('reminders', () => {
     assert.equal(outbox.slice(count).filter((m) => m.text.includes('APT900002')).length, 0, 'not sent twice');
   });
 });
+
+describe('review fixes', () => {
+  test('admin restoring a cancelled appointment follows the booking rules', async () => {
+    const slot = await freeSlot(s.doctor._id, 15);
+    const body = { doctor: String(s.doctor._id), date: slot.date, time: slot.time };
+    const ravis = await call('POST', '/api/appointments', { token: s.ravi, body });
+    assert.equal(ravis.status, 201);
+    const restore = () => call('PATCH', `/api/appointments/${ravis.data.id}/status`, { token: s.admin, body: { status: 'scheduled' } });
+    assert.equal((await call('PATCH', `/api/appointments/${ravis.data.id}/status`, { token: s.admin, body: { status: 'cancelled' } })).status, 200);
+
+    // Someone else took the slot meanwhile: clear message naming that appointment.
+    const ashas = await call('POST', '/api/appointments', { token: s.asha, body });
+    assert.equal(ashas.status, 201);
+    let r = await restore();
+    assert.equal(r.status, 409);
+    assert.match(r.data.message, new RegExp(`since been booked.*${ashas.data.appointmentNo}`));
+    assert.equal((await call('PATCH', `/api/appointments/${ashas.data.id}/cancel`, { token: s.asha, body: {} })).status, 200);
+
+    // Hospital closed that day.
+    const h = await call('POST', '/api/holidays', { token: s.admin, body: { date: slot.date, name: 'Strike' } });
+    assert.equal(h.status, 201);
+    r = await restore();
+    assert.equal(r.status, 400);
+    assert.match(r.data.message, /closed/);
+    await call('DELETE', `/api/holidays/${h.data.holiday._id}`, { token: s.admin });
+
+    r = await restore();
+    assert.equal(r.status, 200);
+    assert.equal(r.data.status, 'scheduled');
+
+    // A past cancelled visit can't come back as upcoming, but can be marked completed.
+    const past = await Appointment.create({
+      appointmentNo: 'APT900003', patient: s.ashaId, account: s.ashaId, doctor: s.doctor._id, department: s.doctor.department,
+      date: clock.addDays(clock.todayString(), -3), time: '09:15', status: 'cancelled', holdsSlot: false,
+    });
+    r = await call('PATCH', `/api/appointments/${past._id}/status`, { token: s.admin, body: { status: 'scheduled' } });
+    assert.equal(r.status, 400);
+    r = await call('PATCH', `/api/appointments/${past._id}/status`, { token: s.admin, body: { status: 'completed' } });
+    assert.equal(r.status, 200);
+  });
+
+  test('a rated visit stays completed, but the doctor can still correct notes', async () => {
+    let r = await call('PATCH', `/api/appointments/${s.ratedAppt}/consult`, { token: s.doc, body: { status: 'no-show' } });
+    assert.equal(r.status, 409);
+    r = await call('PATCH', `/api/appointments/${s.ratedAppt}/consult`, { token: s.doc, body: { status: 'completed', prescription: 'Corrected dose' } });
+    assert.equal(r.status, 200);
+    assert.equal(r.data.prescription, 'Corrected dose');
+  });
+
+  test('hidden reviews do not count towards the public rating', async () => {
+    // The only review was hidden earlier.
+    assert.deepEqual((await call('GET', `/api/doctors/${s.doctor._id}`)).data.rating, { average: 0, count: 0 });
+    await call('PATCH', `/api/appointments/${s.ratedAppt}/feedback/visibility`, { token: s.admin, body: { hidden: false } });
+    assert.deepEqual((await call('GET', `/api/doctors/${s.doctor._id}`)).data.rating, { average: 4, count: 1 });
+  });
+
+  test('a family member given their own login can manage their visits; guardian keeps access', async () => {
+    let r = await call('PUT', `/api/admin/patients/${s.memberId}`, { token: s.admin, body: { name: 'Riya A. Patel', phone: '', email: 'riya@test.io' } });
+    assert.equal(r.status, 200);
+    await call('POST', '/api/auth/forgot-password', { body: { email: 'riya@test.io' } });
+    await settle();
+    const token = lastEmail().text.match(/token=([a-f0-9]{64})/)[1];
+    assert.equal((await call('POST', '/api/auth/reset-password', { body: { token, password: 'Riya12345' } })).status, 200);
+    const riya = (await call('POST', '/api/auth/login', { body: { email: 'riya@test.io', password: 'Riya12345' } })).data.token;
+
+    // Visit booked by the guardian: listed AND openable by the member.
+    const mine = await call('GET', '/api/appointments/mine', { token: riya });
+    assert.ok(mine.data.some((a) => String(a.id) === String(s.memberAppt)));
+    assert.equal((await call('GET', `/api/appointments/${s.memberAppt}`, { token: riya })).status, 200);
+
+    // Visit the member books themselves: the guardian still sees and manages it.
+    const slot = await freeSlot(s.doctor._id, 16);
+    r = await call('POST', '/api/appointments', { token: riya, body: { doctor: String(s.doctor._id), date: slot.date, time: slot.time } });
+    assert.equal(r.status, 201);
+    const own = r.data.id;
+    assert.ok((await call('GET', '/api/appointments/mine', { token: s.asha })).data.some((a) => a.id === own));
+    assert.equal((await call('PATCH', `/api/appointments/${own}/cancel`, { token: riya, body: {} })).status, 200);
+    assert.equal((await call('GET', `/api/appointments/${own}`, { token: s.asha })).status, 200);
+    assert.equal((await call('GET', `/api/appointments/${own}`, { token: s.ravi })).status, 404);
+
+    // Same for health check-ups.
+    let day = clock.addDays(clock.todayString(), 2);
+    while (clock.dayOfWeek(day) === 0) day = clock.addDays(day, 1);
+    r = await call('POST', `/api/packages/${s.pkg}/book`, { token: riya, body: { date: day } });
+    assert.equal(r.status, 201);
+    assert.ok((await call('GET', '/api/packages/bookings/mine', { token: riya })).data.some((b) => b.id === r.data.id));
+    assert.ok((await call('GET', '/api/packages/bookings/mine', { token: s.asha })).data.some((b) => b.id === r.data.id));
+    assert.equal((await call('PATCH', `/api/packages/bookings/${r.data.id}/cancel`, { token: riya })).status, 200);
+  });
+
+  test('a deactivated doctor is signed out and cannot log in until reactivated', async () => {
+    let r = await call('POST', '/api/doctors', {
+      token: s.admin,
+      body: { name: 'Dr. Leaving', email: 'leaving@test.io', password: 'Doctor1234', department: String(s.doctor.department), specialization: 'Cardiologist' },
+    });
+    assert.equal(r.status, 201);
+    const id = r.data.id;
+    const login = () => call('POST', '/api/auth/login', { body: { email: 'leaving@test.io', password: 'Doctor1234' } });
+    const session = (await login()).data.token;
+    assert.equal((await call('GET', '/api/auth/me', { token: session })).status, 200);
+
+    assert.equal((await call('DELETE', `/api/doctors/${id}`, { token: s.admin })).status, 200);
+    assert.equal((await call('GET', '/api/auth/me', { token: session })).status, 401);
+    r = await login();
+    assert.equal(r.status, 401);
+    assert.match(r.data.message, /deactivated/);
+
+    assert.equal((await call('PUT', `/api/doctors/${id}`, { token: s.admin, body: { active: true } })).status, 200);
+    assert.equal((await login()).status, 200);
+  });
+});
+
+describe('report ownership', () => {
+  test('reports say who uploaded them (used to show the delete button)', async () => {
+    const up = await call('POST', '/api/reports', {
+      token: s.admin,
+      body: { patient: s.ashaId, title: 'Ownership check', reportDate: clock.todayString(), fileName: 'own.pdf', data: PDF },
+    });
+    assert.equal(up.status, 201);
+    const me = (await call('GET', '/api/auth/me', { token: s.admin })).data.user;
+    assert.equal(String(up.data.uploadedBy), String(me.id));
+    const list = await call('GET', '/api/reports/mine', { token: s.asha });
+    assert.ok(list.data.some((x) => x.id === up.data.id && String(x.uploadedBy) === String(me.id)));
+  });
+});

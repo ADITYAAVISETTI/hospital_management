@@ -67,7 +67,7 @@ async function bookPackage(pkg) {
             <option value="">Myself (${esc(user.name)})</option>
             ${family.map((f) => `<option value="${esc(f.id)}">${esc(f.name)} (${esc(RELATION_LABELS[f.relation] || 'Family')})</option>`).join('')}
           </select>
-          <span class="hint"><a href="portal.html#family">Add a family member</a></span>
+          ${user.guardian ? '' : '<span class="hint"><a href="portal.html#family">Add a family member</a></span>'}
         </div>
         <div class="field full"><label for="pk-date">Preferred date <span class="req">*</span></label>
           <input id="pk-date" name="date" type="date" required min="${tomorrow}" max="${addDays(todayStr(), 60)}">

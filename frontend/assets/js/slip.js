@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const user = requireLogin();
+  let user;
+  try {
+    user = requireLogin();
+  } catch {
+    return; // redirecting to login
+  }
   const box = $('#slip');
   $('#back-btn').href = homeFor(user.role);
   $('#print-btn').addEventListener('click', () => window.print());

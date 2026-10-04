@@ -45,7 +45,8 @@ async function emailBooking(booking, subject, intro) {
 /* ---------- Bookings ---------- */
 
 router.get('/bookings/mine', authenticate, requireRole('patient'), async (req, res) => {
-  const list = await populateBooking(PackageBooking.find({ account: req.user._id }).sort({ date: -1 }));
+  const me = req.user._id;
+  const list = await populateBooking(PackageBooking.find({ $or: [{ account: me }, { patient: me }] }).sort({ date: -1 }));
   res.json(list.map(formatBooking));
 });
 
@@ -56,7 +57,7 @@ router.get('/bookings', authenticate, requireRole('admin'), async (req, res) => 
 });
 
 router.patch('/bookings/:id/cancel', authenticate, requireRole('patient'), idParam, async (req, res) => {
-  const b = await PackageBooking.findOne({ _id: req.params.id, account: req.user._id });
+  const b = await PackageBooking.findOne({ _id: req.params.id, $or: [{ account: req.user._id }, { patient: req.user._id }] });
   if (!b) throw notFound('Booking not found.');
   if (!['requested', 'confirmed'].includes(b.status)) throw conflict(`This booking is already ${b.status}.`);
   if (b.date < clock.todayString()) throw badRequest('This date has already passed.');
@@ -165,7 +166,7 @@ router.post(
       bookingNo: `HC${String(seq).padStart(6, '0')}`,
       package: pkg._id,
       patient: patient._id,
-      account: req.user._id,
+      account: req.user.guardian || req.user._id,
       date: day,
       price: pkg.price,
       notes,

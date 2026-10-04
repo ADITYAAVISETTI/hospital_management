@@ -4,7 +4,7 @@ const rateLimit = require('express-rate-limit');
 const config = require('../config');
 const User = require('../models/User');
 const Doctor = require('../models/Doctor');
-const { signToken, authenticate } = require('../middleware/auth');
+const { signToken, authenticate, assertCanSignIn } = require('../middleware/auth');
 const { validate, Joi, email, phone, date, password } = require('../middleware/validate');
 const { unauthorized, badRequest, conflict } = require('../utils/httpError');
 const { todayString } = require('../utils/time');
@@ -88,6 +88,7 @@ router.post('/login', authLimiter, validate(loginSchema), async (req, res) => {
   if (!user || !(await user.checkPassword(req.body.password))) {
     throw unauthorized('Incorrect email or password.');
   }
+  await assertCanSignIn(user);
   res.json(await sessionPayload(user));
 });
 

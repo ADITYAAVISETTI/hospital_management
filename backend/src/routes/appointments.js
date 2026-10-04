@@ -77,7 +77,9 @@ async function getViewableAppointment(req) {
   const appt = await populateAppointment(Appointment.findById(req.params.id));
   if (!appt) throw notFound('Appointment not found.');
   const { role, _id } = req.user;
-  const isOwnerPatient = role === 'patient' && accountOf(appt) === String(_id);
+  // The managing login, or the patient themselves (a family member who was later given their own login).
+  const isOwnerPatient =
+    role === 'patient' && (accountOf(appt) === String(_id) || String(appt.patient && appt.patient._id) === String(_id));
   const isOwnerDoctor = role === 'doctor' && appt.doctor && appt.doctor.user && String(appt.doctor.user._id) === String(_id);
   if (!(role === 'admin' || isOwnerPatient || isOwnerDoctor)) throw notFound('Appointment not found.');
   return appt;
@@ -114,7 +116,8 @@ async function resolvePatient(req) {
   }
   const me = req.user;
   if (!req.body.patient || String(req.body.patient) === String(me._id)) {
-    return { patient: me, account: me._id, bookedBy: 'patient' };
+    // A family member with their own login stays managed by their guardian (as for front-desk bookings).
+    return { patient: me, account: me.guardian || me._id, bookedBy: 'patient' };
   }
   const member = await User.findOne({ _id: req.body.patient, guardian: me._id });
   if (!member) throw notFound('Family member not found.');
@@ -188,6 +191,9 @@ router.patch('/:id/consult', requireRole('doctor'), idParam, validate(consultSch
   if (appt.date > clock.todayString()) {
     throw badRequest('You can only record a consultation on or after the appointment day.');
   }
+  if (appt.feedback && appt.feedback.rating && req.body.status !== 'completed') {
+    throw conflict('The patient has already rated this visit, so it must stay completed.');
+  }
   Object.assign(appt, req.body);
   await appt.save();
   res.json(formatAppointment(appt, 'doctor'));
@@ -250,6 +256,23 @@ router.patch(
     const appt = await getViewableAppointment(req);
     const { status } = req.body;
     const wasCancelled = appt.status === 'cancelled';
+    if (wasCancelled && status !== 'cancelled') {
+      // Restoring a cancelled appointment takes its slot back.
+      const taken = await Appointment.findOne({
+        _id: { $ne: appt._id },
+        doctor: appt.doctor._id,
+        date: appt.date,
+        time: appt.time,
+        holdsSlot: true,
+      }).select('appointmentNo');
+      if (taken) throw conflict(`This slot has since been booked by another appointment (${taken.appointmentNo}), so it cannot be restored.`);
+      if (status === 'scheduled') {
+        // Back to an upcoming visit: the usual booking rules apply (not past, no holiday/leave, …).
+        const doctor = await Doctor.findOne({ _id: appt.doctor._id, active: true });
+        if (!doctor) throw badRequest('This doctor is no longer available, so the appointment cannot be restored.');
+        await assertBookable({ doctor, day: appt.date, slot: appt.time, patientId: appt.patient._id, ignoreId: appt._id });
+      }
+    }
     appt.status = status;
     appt.holdsSlot = status !== 'cancelled';
     if (status === 'cancelled') {

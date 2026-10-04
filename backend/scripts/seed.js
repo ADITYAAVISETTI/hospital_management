@@ -17,6 +17,7 @@ const Holiday = require('../src/models/Holiday');
 const HealthPackage = require('../src/models/HealthPackage');
 const PackageBooking = require('../src/models/PackageBooking');
 const Report = require('../src/models/Report');
+const { todayString } = require('../src/utils/time');
 
 const ADMIN = {
   name: 'Hospital Administrator',
@@ -256,7 +257,7 @@ async function main() {
     await HealthPackage.updateOne({ slug: slugify(p.name) }, { $setOnInsert: { ...p, slug: slugify(p.name) } }, { upsert: true });
   }
   console.log(`Health packages: ${packages.length}`);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayString(); // hospital-local date
   for (const h of holidays.filter((x) => x.date >= today)) {
     await Holiday.updateOne({ date: h.date }, { $setOnInsert: h }, { upsert: true });
   }

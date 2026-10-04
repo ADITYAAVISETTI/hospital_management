@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="field" style="margin-bottom:14px">
           <label for="b-person">Who is this appointment for?</label>
           <select id="b-person" name="patient">${people.map((p) => `<option value="${esc(p.id)}" ${p.id === state.patient ? 'selected' : ''}>${esc(p.label)}</option>`).join('')}</select>
-          <span class="hint">Booking for a child or parent? <a href="portal.html#family">Add a family member</a> first.</span>
+          ${user.guardian ? '' : '<span class="hint">Booking for a child or parent? <a href="portal.html#family">Add a family member</a> first.</span>'}
         </div>
         <ul class="summary-list">
           <li><span>UHID</span><span id="b-uhid">—</span></li>
