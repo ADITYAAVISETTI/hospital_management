@@ -1,318 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="assets/css/styles.css" />
-    <link rel="stylesheet" href="assets/css/login.css" />
-    <title>Luxe Hotels - Premium Hospitality Experience</title>
-  </head>
-  <body class="auth-body">
-    <div class="auth-container">
-      <!-- Left Side - Image/Brand Section -->
-      <div class="auth-brand-section">
-        <div class="brand-content">
-          <div class="brand-logo">
-            <i class="ri-hotel-line"></i>
-            <h1>Luxe Hotels</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityCare Multispeciality Hospital | Book Doctor Appointments Online</title>
+  <meta name="description" content="CityCare Multispeciality Hospital: expert doctors across cardiology, neurology, orthopaedics, paediatrics and more. Book appointments online, 24x7 emergency care.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="home">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Trusted care, close to home</span>
+          <h1>Expert doctors. <span>Compassionate care.</span></h1>
+          <p class="hero-lead">From routine check-ups to advanced surgery, CityCare brings specialists from every major discipline under one roof. Book your consultation online in under a minute.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="book.html"><i class="ri-calendar-check-line"></i>Book an Appointment</a>
+            <a class="btn btn-outline btn-lg" href="doctors.html"><i class="ri-stethoscope-line"></i>Find a Doctor</a>
           </div>
-          <h2 class="brand-tagline">Experience Luxury Redefined</h2>
-          <p class="brand-description">
-            Discover world-class hospitality with our premium collection of hotels and resorts
-          </p>
-          <div class="brand-features">
-            <div class="feature-item">
-              <i class="ri-star-fill"></i>
-              <span>5-Star Service</span>
-            </div>
-            <div class="feature-item">
-              <i class="ri-map-pin-line"></i>
-              <span>Prime Locations</span>
-            </div>
-            <div class="feature-item">
-              <i class="ri-shield-check-line"></i>
-              <span>Secure Booking</span>
-            </div>
+          <div class="hero-trust">
+            <span><i class="ri-shield-check-fill"></i>Patient safety first</span>
+            <span><i class="ri-time-fill"></i>24x7 Emergency</span>
+            <span><i class="ri-hand-heart-fill"></i>Cashless insurance</span>
           </div>
         </div>
-        <div class="brand-overlay"></div>
-      </div>
 
-      <!-- Right Side - Auth Forms -->
-      <div class="auth-form-section">
-        <div class="auth-forms-wrapper">
-          <!-- Tab Navigation -->
-          <div class="auth-tabs">
-            <button class="tab-btn active" onclick="switchToLogin()">
-              <i class="ri-user-line"></i>
-              Login
-            </button>
-            <button class="tab-btn" onclick="switchToRegister()">
-              <i class="ri-user-add-line"></i>
-              Register
-            </button>
-          </div>
-
-          <!-- Login Form -->
-          <div class="auth-form-container" id="loginForm">
-            <form class="modern-auth-form">
-              <div class="form-header">
-                <h2>Welcome Back</h2>
-                <p>Please enter your details to continue</p>
-              </div>
-
-              <div class="form-body">
-                <div class="input-group">
-                  <div class="input-wrapper">
-                    <i class="ri-mail-line input-icon"></i>
-                    <input 
-                      type="email" 
-                      id="login-email" 
-                      class="modern-input" 
-                      placeholder=" "
-                      required
-                    />
-                    <label for="login-email" class="modern-label">Email Address</label>
-                  </div>
-                </div>
-
-                <div class="input-group">
-                  <div class="input-wrapper">
-                    <i class="ri-lock-line input-icon"></i>
-                    <input 
-                      type="password" 
-                      id="login-pass" 
-                      class="modern-input" 
-                      placeholder=" "
-                      required
-                    />
-                    <label for="login-pass" class="modern-label">Password</label>
-                    <i class="ri-eye-off-line toggle-password" id="login-eye"></i>
-                  </div>
-                </div>
-
-                <div class="form-options">
-                  <label class="modern-checkbox">
-                    <input type="checkbox" id="remember-me" />
-                    <span class="checkbox-mark"></span>
-                    <span class="checkbox-label">Remember me</span>
-                  </label>
-                  <a href="#" class="forgot-link">Forgot Password?</a>
-                </div>
-
-                <div class="role-selector">
-                  <label class="role-toggle">
-                    <input type="checkbox" id="login-check" onclick="toggleLoginRole()" />
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Admin Login</span>
-                  </label>
-                  <div class="role-display">
-                    Logging in as: <strong id="loginRoleDisplay">Regular User</strong>
-                  </div>
-                </div>
-
-                <button type="submit" class="auth-submit-btn">
-                  <span>Sign In</span>
-                  <i class="ri-arrow-right-line"></i>
-                </button>
-
-                <div class="divider">
-                  <span>OR</span>
-                </div>
-
-                <div class="social-auth">
-                  <button type="button" class="social-btn">
-                    <i class="ri-google-fill"></i>
-                  </button>
-                  <button type="button" class="social-btn">
-                    <i class="ri-facebook-fill"></i>
-                  </button>
-                  <button type="button" class="social-btn">
-                    <i class="ri-twitter-fill"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="form-footer">
-                <p>Don't have an account? 
-                  <a href="#" onclick="switchToRegister()">Create Account</a>
-                </p>
-              </div>
-            </form>
-          </div>
-
-          <!-- Register Form -->
-          <div class="auth-form-container" id="registerForm" style="display: none;">
-            <form class="modern-auth-form">
-              <div class="form-header">
-                <h2>Create Account</h2>
-                <p>Join us for an exceptional experience</p>
-              </div>
-
-              <div class="form-body">
-                <div class="input-group">
-                  <div class="input-wrapper">
-                    <i class="ri-user-line input-icon"></i>
-                    <input 
-                      type="text" 
-                      id="register-name" 
-                      class="modern-input" 
-                      placeholder=" "
-                      required
-                    />
-                    <label for="register-name" class="modern-label">Full Name</label>
-                  </div>
-                </div>
-
-                <div class="input-group">
-                  <div class="input-wrapper">
-                    <i class="ri-mail-line input-icon"></i>
-                    <input 
-                      type="email" 
-                      id="register-email" 
-                      class="modern-input" 
-                      placeholder=" "
-                      required
-                    />
-                    <label for="register-email" class="modern-label">Email Address</label>
-                  </div>
-                </div>
-
-                <div class="input-group">
-                  <div class="input-wrapper">
-                    <i class="ri-lock-line input-icon"></i>
-                    <input 
-                      type="password" 
-                      id="register-pass" 
-                      class="modern-input" 
-                      placeholder=" "
-                      required
-                    />
-                    <label for="register-pass" class="modern-label">Password</label>
-                    <i class="ri-eye-off-line toggle-password" id="register-eye"></i>
-                  </div>
-                </div>
-
-                <div class="password-strength">
-                  <div class="strength-bar">
-                    <div class="strength-progress"></div>
-                  </div>
-                  <span class="strength-text">Password strength</span>
-                </div>
-
-                <div class="role-selector">
-                  <label class="role-toggle">
-                    <input type="checkbox" id="register-is-admin" onclick="toggleRegisterRole()" />
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Register as Admin</span>
-                  </label>
-                  <div class="role-display">
-                    Registering as: <strong id="registerRoleDisplay">Regular User</strong>
-                  </div>
-                </div>
-
-                <div class="terms-checkbox">
-                  <label class="modern-checkbox">
-                    <input type="checkbox" id="accept-terms" required />
-                    <span class="checkbox-mark"></span>
-                    <span class="checkbox-label">
-                      I agree to the <a href="#">Terms & Conditions</a>
-                    </span>
-                  </label>
-                </div>
-
-                <button type="submit" class="auth-submit-btn">
-                  <span>Create Account</span>
-                  <i class="ri-arrow-right-line"></i>
-                </button>
-
-                <div class="divider">
-                  <span>OR</span>
-                </div>
-
-                <div class="social-auth">
-                  <button type="button" class="social-btn">
-                    <i class="ri-google-fill"></i>
-                  </button>
-                  <button type="button" class="social-btn">
-                    <i class="ri-facebook-fill"></i>
-                  </button>
-                  <button type="button" class="social-btn">
-                    <i class="ri-twitter-fill"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="form-footer">
-                <p>Already have an account? 
-                  <a href="#" onclick="switchToLogin()">Sign In</a>
-                </p>
-              </div>
-            </form>
+        <div class="quick-card">
+          <h3><i class="ri-search-line"></i>Find the right specialist</h3>
+          <form id="quick-search" class="form-grid" autocomplete="off">
+            <div class="field full">
+              <label for="qs-dept">Department</label>
+              <select id="qs-dept" name="department">
+                <option value="">All departments</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="qs-q">Doctor name or condition</label>
+              <input id="qs-q" name="q" type="search" placeholder="e.g. Dr. Mehta, knee pain, cardiology">
+            </div>
+            <div class="full">
+              <button class="btn btn-primary btn-block" type="submit"><i class="ri-search-line"></i>Search doctors</button>
+            </div>
+          </form>
+          <div class="quick-links">
+            <a href="book.html"><i class="ri-calendar-2-line"></i>Book visit</a>
+            <a href="portal.html"><i class="ri-file-list-3-line"></i>My reports</a>
+            <a href="contact.html#visiting"><i class="ri-time-line"></i>Visiting hours</a>
+            <a href="tel:108"><i class="ri-first-aid-kit-line"></i>Ambulance</a>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <script src="assets/js/main.js"></script>
-    <script>
-      function switchToLogin() {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('registerForm').style.display = 'none';
-        document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        document.querySelectorAll('.tab-btn')[1].classList.remove('active');
-      }
+    <section class="stats-band" aria-label="Hospital at a glance">
+      <div class="container">
+        <div class="stat-big"><strong id="stat-doctors">40+</strong><span>Specialist doctors</span></div>
+        <div class="stat-big"><strong id="stat-depts">8</strong><span>Departments</span></div>
+        <div class="stat-big"><strong>250</strong><span>Beds, incl. 40 ICU</span></div>
+        <div class="stat-big"><strong>1.2 lakh+</strong><span>Patients treated</span></div>
+      </div>
+    </section>
 
-      function switchToRegister() {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        document.querySelectorAll('.tab-btn')[0].classList.remove('active');
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-      }
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Centres of excellence</span>
+          <h2>Our departments</h2>
+          <p>Specialised teams, modern diagnostics and coordinated care for every stage of life.</p>
+        </div>
+        <div id="dept-grid" class="grid grid-4"></div>
+        <p class="text-center" style="margin-top:32px"><a class="btn btn-outline" href="departments.html">View all departments <i class="ri-arrow-right-line"></i></a></p>
+      </div>
+    </section>
 
-      function toggleLoginRole() {
-        const checkbox = document.getElementById('login-check');
-        const display = document.getElementById('loginRoleDisplay');
-        display.textContent = checkbox.checked ? 'Administrator' : 'Regular User';
-        display.style.color = checkbox.checked ? '#f59e0b' : '#2563eb';
-      }
-      
-      function toggleRegisterRole() {
-        const checkbox = document.getElementById('register-is-admin');
-        const display = document.getElementById('registerRoleDisplay');
-        display.textContent = checkbox.checked ? 'Administrator' : 'Regular User';
-        display.style.color = checkbox.checked ? '#f59e0b' : '#2563eb';
-      }
+    <section class="section section-soft" id="about">
+      <div class="container">
+        <div class="grid grid-2" style="align-items:center;gap:56px">
+          <div>
+            <span class="eyebrow">Why CityCare</span>
+            <h2>Hospital care designed around you</h2>
+            <p class="muted">We combine experienced specialists, modern technology and a warm, patient-first culture, so you always know what is happening and why.</p>
+            <div class="grid" style="gap:22px;margin-top:28px">
+              <div class="feature">
+                <span class="feature-icon"><i class="ri-user-star-line"></i></span>
+                <div><h3>Experienced specialists</h3><p>Senior consultants with years of experience in leading institutions.</p></div>
+              </div>
+              <div class="feature">
+                <span class="feature-icon"><i class="ri-microscope-line"></i></span>
+                <div><h3>Advanced diagnostics</h3><p>In-house lab, CT, MRI and digital X-ray with same-day reports.</p></div>
+              </div>
+              <div class="feature">
+                <span class="feature-icon"><i class="ri-smartphone-line"></i></span>
+                <div><h3>Your records online</h3><p>See appointments, diagnoses and prescriptions in your patient portal.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-2">
+            <div class="card"><span class="feature-icon"><i class="ri-alarm-warning-line"></i></span><h3 style="margin-top:14px">24x7 Emergency</h3><p class="muted mb-0">Trauma team, ICU and ambulance ready around the clock.</p></div>
+            <div class="card"><span class="feature-icon"><i class="ri-capsule-line"></i></span><h3 style="margin-top:14px">24-hour Pharmacy</h3><p class="muted mb-0">Genuine medicines, available day and night.</p></div>
+            <div class="card"><span class="feature-icon"><i class="ri-bank-card-line"></i></span><h3 style="margin-top:14px">Cashless insurance</h3><p class="muted mb-0">Tie-ups with major insurers and TPAs.</p></div>
+            <div class="card"><span class="feature-icon"><i class="ri-home-heart-line"></i></span><h3 style="margin-top:14px">Home sample collection</h3><p class="muted mb-0">Lab tests collected from your doorstep.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      // Password strength checker
-      document.getElementById('register-pass')?.addEventListener('input', function(e) {
-        const password = e.target.value;
-        const strengthBar = document.querySelector('.strength-progress');
-        const strengthText = document.querySelector('.strength-text');
-        
-        let strength = 0;
-        if (password.length >= 8) strength++;
-        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
-        if (password.match(/[0-9]/)) strength++;
-        if (password.match(/[^a-zA-Z0-9]/)) strength++;
-        
-        const widths = ['0%', '25%', '50%', '75%', '100%'];
-        const colors = ['#ef4444', '#f59e0b', '#f59e0b', '#10b981', '#10b981'];
-        const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
-        
-        if (strengthBar) {
-          strengthBar.style.width = widths[strength];
-          strengthBar.style.background = colors[strength];
-        }
-        if (strengthText) {
-          strengthText.textContent = password.length > 0 ? texts[strength] : 'Password strength';
-          strengthText.style.color = password.length > 0 ? colors[strength] : '#9ca3af';
-        }
-      });
-    </script>
-  </body>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Meet our team</span>
+          <h2>Our specialists</h2>
+          <p>Highly qualified doctors who take time to listen and explain.</p>
+        </div>
+        <div id="doctor-grid" class="grid grid-4"></div>
+        <p class="text-center" style="margin-top:32px"><a class="btn btn-outline" href="doctors.html">See all doctors <i class="ri-arrow-right-line"></i></a></p>
+      </div>
+    </section>
+
+    <section class="section section-soft">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Simple &amp; quick</span>
+          <h2>Book an appointment in 3 steps</h2>
+        </div>
+        <div class="grid grid-3 steps">
+          <div class="card step"><div class="step-num">1</div><h3>Choose a doctor</h3><p class="mb-0">Pick a department or search for a specialist by name.</p></div>
+          <div class="card step"><div class="step-num">2</div><h3>Pick a time</h3><p class="mb-0">See real-time availability and choose a slot that suits you.</p></div>
+          <div class="card step"><div class="step-num">3</div><h3>Get confirmed</h3><p class="mb-0">Receive an appointment number instantly. Manage it anytime online.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Patient stories</span>
+          <h2>What our patients say</h2>
+        </div>
+        <div class="grid grid-3">
+          <figure class="card testimonial">
+            <div class="stars" aria-label="5 out of 5 stars"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></div>
+            <blockquote>“Booking was effortless and the cardiology team explained every test clearly. I felt looked after from the moment I walked in.”</blockquote>
+            <figcaption class="who"><span class="avatar" style="background:#0c9a8a">RK</span><span>Ramesh K.<small>Cardiology patient</small></span></figcaption>
+          </figure>
+          <figure class="card testimonial">
+            <div class="stars" aria-label="5 out of 5 stars"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></div>
+            <blockquote>“The paediatric doctors were so gentle with my daughter. Seeing the prescription in the portal afterwards was really handy.”</blockquote>
+            <figcaption class="who"><span class="avatar" style="background:#7a4fd1">SP</span><span>Swathi P.<small>Parent</small></span></figcaption>
+          </figure>
+          <figure class="card testimonial">
+            <div class="stars" aria-label="4 out of 5 stars"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-line"></i></div>
+            <blockquote>“After my knee replacement, the physiotherapy team got me walking in days. Clean rooms and caring nurses throughout.”</blockquote>
+            <figcaption class="who"><span class="avatar" style="background:#c2410c">MA</span><span>Mohammed A.<small>Orthopaedics patient</small></span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Medical emergency?</h2>
+            <p>Our emergency department and ambulance service are available 24 hours a day, 7 days a week.</p>
+          </div>
+          <a class="phone-big" href="tel:108"><i class="ri-phone-fill"></i>Call 108</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
 </html>

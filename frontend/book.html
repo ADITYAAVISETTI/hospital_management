@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book an Appointment | CityCare Hospital</title>
+  <meta name="description" content="Book a doctor's appointment at CityCare Hospital online. See live availability and get instant confirmation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="book">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Home</a> / Book Appointment</div>
+        <h1>Book an Appointment</h1>
+        <p>Choose your doctor, pick a convenient time and get instant confirmation.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="alert alert-danger" style="margin-bottom:24px">
+          <i class="ri-alarm-warning-line"></i>
+          <div><strong>Not for emergencies.</strong> For chest pain, breathing difficulty, severe bleeding or injury, call <a href="tel:108">108</a> or come straight to our Emergency department.</div>
+        </div>
+
+        <ol class="stepper" aria-label="Booking progress">
+          <li class="stepper-item" data-step="1"><span class="n">1</span>Doctor</li>
+          <li class="stepper-item" data-step="2"><span class="n">2</span>Date &amp; time</li>
+          <li class="stepper-item" data-step="3"><span class="n">3</span>Confirm</li>
+        </ol>
+
+        <div class="detail-grid">
+          <div>
+            <!-- Step 1 -->
+            <div class="card" data-panel="1">
+              <h2>Choose a doctor</h2>
+              <div class="toolbar" style="margin-bottom:16px">
+                <select id="b-dept" class="input" aria-label="Department">
+                  <option value="">All departments</option>
+                </select>
+                <div class="input-icon">
+                  <i class="ri-search-line"></i>
+                  <input id="b-q" class="input" type="search" placeholder="Search by doctor name" aria-label="Search doctor">
+                </div>
+              </div>
+              <div id="b-doctors" class="doctor-pick"></div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="card hidden" data-panel="2">
+              <div class="dash-title" style="margin-bottom:12px">
+                <h2 class="mb-0">Pick a date &amp; time</h2>
+                <button type="button" class="btn btn-ghost btn-sm" data-goto="1"><i class="ri-arrow-left-line"></i>Change doctor</button>
+              </div>
+              <div id="b-dates" class="date-strip" role="listbox" aria-label="Available dates"></div>
+              <div class="field" style="margin:14px 0 0;max-width:260px">
+                <label for="b-date-other">Or choose another date</label>
+                <input id="b-date-other" type="date">
+              </div>
+              <div id="b-slots" style="margin-top:8px"></div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="card hidden" data-panel="3">
+              <div class="dash-title" style="margin-bottom:12px">
+                <h2 class="mb-0">Confirm your appointment</h2>
+                <button type="button" class="btn btn-ghost btn-sm" data-goto="2"><i class="ri-arrow-left-line"></i>Change time</button>
+              </div>
+              <div id="b-confirm"></div>
+            </div>
+
+            <!-- Done -->
+            <div class="card hidden" data-panel="4">
+              <div id="b-done"></div>
+            </div>
+          </div>
+
+          <aside class="card sticky-card" id="b-summary">
+            <h3>Your appointment</h3>
+            <ul class="summary-list">
+              <li><span>Doctor</span><span id="s-doctor">—</span></li>
+              <li><span>Department</span><span id="s-dept">—</span></li>
+              <li><span>Date</span><span id="s-date">—</span></li>
+              <li><span>Time</span><span id="s-time">—</span></li>
+              <li><span>Consultation fee</span><span id="s-fee">—</span></li>
+            </ul>
+            <p class="muted small mb-0"><i class="ri-information-line"></i> Please arrive 15 minutes early with a photo ID and any previous reports. The fee is paid at the hospital.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/book.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard | CityCare Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="doctor-portal">
+  <div id="site-header"></div>
+
+  <main class="dash">
+    <nav class="dash-nav" aria-label="Dashboard sections">
+      <div class="dash-user" id="dash-user"></div>
+      <button type="button" data-tab="day" class="active"><i class="ri-calendar-todo-line"></i>Day schedule</button>
+      <button type="button" data-tab="upcoming"><i class="ri-calendar-2-line"></i>Upcoming <span class="count hidden" id="upcoming-count"></span></button>
+      <button type="button" data-tab="history"><i class="ri-history-line"></i>History</button>
+      <button type="button" data-tab="profile"><i class="ri-user-line"></i>My profile</button>
+    </nav>
+
+    <div class="dash-main">
+      <section data-view="day">
+        <div class="dash-title">
+          <div><h1 id="day-title">Today</h1><span class="muted small" id="last-updated"></span></div>
+          <div class="toolbar mb-0" style="margin:0">
+            <button type="button" class="btn btn-ghost btn-sm" id="day-prev" aria-label="Previous day"><i class="ri-arrow-left-s-line"></i></button>
+            <input type="date" id="day-picker" class="input" aria-label="Choose date">
+            <button type="button" class="btn btn-ghost btn-sm" id="day-next" aria-label="Next day"><i class="ri-arrow-right-s-line"></i></button>
+            <button type="button" class="btn btn-outline btn-sm" id="day-today">Today</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="refresh-appts" title="Check for new bookings"><i class="ri-refresh-line"></i>Refresh</button>
+          </div>
+        </div>
+        <div class="grid grid-4" id="day-stats" style="margin-bottom:20px"></div>
+        <div id="day-list"></div>
+      </section>
+
+      <section data-view="upcoming" class="hidden">
+        <div class="dash-title"><h1>Upcoming appointments</h1></div>
+        <div id="upcoming-list"></div>
+      </section>
+
+      <section data-view="history" class="hidden">
+        <div class="dash-title">
+          <h1>Consultation history</h1>
+          <div class="input-icon" style="min-width:260px"><i class="ri-search-line"></i><input id="history-q" class="input" type="search" placeholder="Search patient name or UHID"></div>
+        </div>
+        <div id="history-list"></div>
+      </section>
+
+      <section data-view="profile" class="hidden">
+        <div class="dash-title"><h1>My profile</h1></div>
+        <div id="profile-box"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/doctor-portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Doctor | CityCare Hospital</title>
+  <meta name="description" content="Search CityCare Hospital doctors by name, speciality or department and book online.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="doctors">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Home</a> / Find a Doctor</div>
+        <h1>Find a Doctor</h1>
+        <p>Search by name, speciality or condition, then book a slot that suits you.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <form class="toolbar" id="doctor-filter" role="search">
+          <div class="input-icon">
+            <i class="ri-search-line"></i>
+            <input id="f-q" class="input" type="search" placeholder="Doctor name or speciality" aria-label="Search doctors">
+          </div>
+          <select id="f-dept" class="input" aria-label="Department">
+            <option value="">All departments</option>
+          </select>
+          <select id="f-lang" class="input" aria-label="Language">
+            <option value="">Any language</option>
+          </select>
+          <select id="f-sort" class="input" aria-label="Sort by">
+            <option value="name">Sort: Name</option>
+            <option value="exp">Sort: Most experienced</option>
+            <option value="fee">Sort: Lowest fee</option>
+          </select>
+        </form>
+        <p id="result-count" class="muted small"></p>
+        <div id="doctor-list" class="grid grid-4"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/doctors.js"></script>
+</body>
+</html>

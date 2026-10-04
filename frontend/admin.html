@@ -1,170 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Luxe Hotels</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/styles.css" />
-    <link rel="stylesheet" href="assets/css/admin.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | CityCare Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 </head>
-<body>
-    <header >
-        <div class="header-container">
-            <h1>Luxe Hotels Admin</h1>
-            <nav>
-                <ul>
-                    <li><a href="./admin.html" class="active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
-                    <li><a href="./booking.html"><i class="ri-calendar-check-line"></i> Bookings</a></li>
-                    <li><a href="./rooms.html"><i class="ri-hotel-bed-line"></i> Rooms</a></li>
-                    <li><a href="./hotel.html"><i class="ri-building-line"></i> Hotels</a></li>
-                    <li id="username"><i class="ri-user-3-fill"></i> <span></span></li>
-                    <li id="logoutBtn" onclick="logout()"><i class="ri-logout-box-line"></i> Logout</li>
-                </ul>
-            </nav>
+<body data-page="admin">
+  <div id="site-header"></div>
+
+  <main class="dash">
+    <nav class="dash-nav" aria-label="Admin sections">
+      <div class="dash-user" id="dash-user"></div>
+      <button type="button" data-tab="overview" class="active"><i class="ri-dashboard-line"></i>Dashboard</button>
+      <button type="button" data-tab="appointments"><i class="ri-calendar-2-line"></i>Appointments</button>
+      <button type="button" data-tab="doctors"><i class="ri-stethoscope-line"></i>Doctors</button>
+      <button type="button" data-tab="departments"><i class="ri-hospital-line"></i>Departments</button>
+      <button type="button" data-tab="patients"><i class="ri-group-line"></i>Patients</button>
+      <button type="button" data-tab="checkups"><i class="ri-heart-pulse-line"></i>Check-ups <span class="count hidden" id="chk-count"></span></button>
+      <button type="button" data-tab="holidays"><i class="ri-calendar-close-line"></i>Holidays</button>
+      <button type="button" data-tab="enquiries"><i class="ri-mail-line"></i>Enquiries <span class="count hidden" id="enq-count"></span></button>
+    </nav>
+
+    <div class="dash-main">
+      <!-- Overview -->
+      <section data-view="overview">
+        <div class="dash-title">
+          <div><h1>Hospital dashboard</h1><p class="muted mb-0" id="today-label"></p></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="refresh-stats"><i class="ri-refresh-line"></i>Refresh</button>
         </div>
-    </header>
-
-    <main>
-        <div class="dashboard-container">
-            <section class="welcome-section">
-                <div id="welcome-section">
-                    <h2>Welcome to Admin Dashboard</h2>
-                    <p>Manage your hotels, rooms, and bookings efficiently</p>
-                </div>
-            </section>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="ri-building-2-line"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Total Hotels</h3>
-                        <p class="stat-number" id="totalHotels">0</p>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="ri-hotel-bed-fill"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Total Rooms</h3>
-                        <p class="stat-number" id="totalRooms">0</p>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="ri-calendar-check-fill"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Active Bookings</h3>
-                        <p class="stat-number" id="activeBookings">0</p>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="ri-money-dollar-circle-line"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>Revenue</h3>
-                        <p class="stat-number">₹<span id="totalRevenue">0</span></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-actions">
-                <h3>Quick Actions</h3>
-                <div class="action-cards">
-                    <div class="action-card" onclick="window.location.href='./hotel.html'">
-                        <i class="ri-add-circle-line"></i>
-                        <h4>Add New Hotel</h4>
-                        <p>Register a new hotel property</p>
-                    </div>
-                    <div class="action-card" onclick="window.location.href='./rooms.html'">
-                        <i class="ri-door-open-line"></i>
-                        <h4>Manage Rooms</h4>
-                        <p>Add or update room details</p>
-                    </div>
-                    <div class="action-card" onclick="window.location.href='./booking.html?view=all'">
-                        <i class="ri-book-2-line"></i>
-                        <h4>View All Bookings</h4>
-                        <p>Check all user reservations</p>
-                    </div>
-                </div>
-            </div>
+        <div id="stats-cards" class="grid grid-3" style="margin-bottom:24px"></div>
+        <div class="grid grid-2" style="margin-bottom:24px">
+          <div class="card"><h3>Appointments, last 7 days</h3><div id="chart-week"></div></div>
+          <div class="card"><h3>Appointments by department</h3><div id="chart-dept"></div></div>
         </div>
-    </main>
+        <div class="card">
+          <div class="dash-title" style="margin-bottom:12px"><h3 class="mb-0">Today's appointments</h3><button type="button" class="btn btn-ghost btn-sm" data-jump="appointments">View all</button></div>
+          <div id="today-list"></div>
+        </div>
+      </section>
 
-    <footer>
-        <p>&copy; 2024 Luxe Hotels Admin. All rights reserved.</p>
-    </footer>
+      <!-- Appointments -->
+      <section data-view="appointments" class="hidden">
+        <div class="dash-title">
+          <h1>Appointments</h1>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn btn-ghost" id="export-appts"><i class="ri-file-excel-2-line"></i>Export CSV</button>
+            <button type="button" class="btn btn-primary" id="new-appt"><i class="ri-add-line"></i>New appointment</button>
+          </div>
+        </div>
+        <form class="toolbar" id="appt-filter">
+          <div class="input-icon"><i class="ri-search-line"></i><input class="input" name="q" type="search" placeholder="Patient name, UHID, phone or appointment no."></div>
+          <select class="input" name="status" aria-label="Status">
+            <option value="">All statuses</option><option value="scheduled">Scheduled</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option><option value="no-show">No-show</option>
+          </select>
+          <select class="input" name="doctor" aria-label="Doctor"><option value="">All doctors</option></select>
+          <input class="input" type="date" name="date" aria-label="Date">
+          <button type="button" class="btn btn-ghost btn-sm" id="appt-clear">Clear</button>
+        </form>
+        <div id="appt-table"></div>
+        <div class="pagination" id="appt-pages"></div>
+      </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const authToken = localStorage.getItem('auth-token');
-            const userRole = localStorage.getItem('userRole');
-            
-            if (!authToken) {
-                window.location.href = "./index.html";
-                return;
-            }
-            
-            // Check if user is admin
-            if (userRole !== 'admin') {
-                alert('Access Denied! Only administrators can access this page.');
-                window.location.href = "./user.html";
-                return;
-            }
+      <!-- Doctors -->
+      <section data-view="doctors" class="hidden">
+        <div class="dash-title">
+          <h1>Doctors</h1>
+          <button type="button" class="btn btn-primary" id="add-doctor"><i class="ri-user-add-line"></i>Add doctor</button>
+        </div>
+        <div class="toolbar">
+          <div class="input-icon"><i class="ri-search-line"></i><input class="input" id="doc-q" type="search" placeholder="Search doctors"></div>
+        </div>
+        <div id="doctor-table"></div>
+      </section>
 
-            // Display username
-            const username = localStorage.getItem('username');
-            const usernameElement = document.querySelector("#username span");
-            if (usernameElement && username) {
-                usernameElement.textContent = username;
-            }
+      <!-- Departments -->
+      <section data-view="departments" class="hidden">
+        <div class="dash-title">
+          <h1>Departments</h1>
+          <button type="button" class="btn btn-primary" id="add-dept"><i class="ri-add-line"></i>Add department</button>
+        </div>
+        <div id="dept-table"></div>
+      </section>
 
-            // Fetch and display statistics
-            fetchStatistics();
-        });
+      <!-- Patients -->
+      <section data-view="patients" class="hidden">
+        <div class="dash-title">
+          <h1>Patients</h1>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn btn-ghost" id="export-patients"><i class="ri-file-excel-2-line"></i>Export CSV</button>
+            <button type="button" class="btn btn-primary" id="add-patient"><i class="ri-user-add-line"></i>Register patient</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="input-icon"><i class="ri-search-line"></i><input class="input" id="patient-q" type="search" placeholder="Name, email, phone or UHID"></div>
+        </div>
+        <div id="patient-table"></div>
+      </section>
 
-        const logout = () => {
-            const confirm = window.confirm('Are you sure you want to logout?');
-            if(confirm){
-                localStorage.removeItem('auth-token');
-                localStorage.removeItem('username');
-                localStorage.removeItem('userRole');
-                window.location.href = "./index.html";
-            }
-        }
+      <!-- Check-ups -->
+      <section data-view="checkups" class="hidden">
+        <div class="dash-title"><h1>Health check-ups</h1><button type="button" class="btn btn-primary" id="add-package"><i class="ri-add-line"></i>Add package</button></div>
+        <div class="tabs" role="tablist">
+          <button type="button" class="active" data-chk="requested">New requests</button>
+          <button type="button" data-chk="confirmed">Confirmed</button>
+          <button type="button" data-chk="">All bookings</button>
+          <button type="button" data-chk="packages">Packages</button>
+        </div>
+        <div id="chk-box"></div>
+      </section>
 
-        async function fetchStatistics() {
-            try {
-                // Fetch hotels count
-                const hotelsRes = await fetch('http://localhost:3000/hotel');
-                const hotels = await hotelsRes.json();
-                document.getElementById('totalHotels').textContent = hotels.length || 0;
+      <!-- Holidays -->
+      <section data-view="holidays" class="hidden">
+        <div class="dash-title"><h1>OPD holidays</h1></div>
+        <p class="muted">No appointments can be booked on these days. Adding a holiday cancels appointments already booked that day, and patients are emailed.</p>
+        <div class="grid grid-2" style="align-items:start">
+          <div class="card" id="holiday-list"></div>
+          <form class="card form-grid" id="holiday-form" novalidate>
+            <h3 class="full" style="margin:0">Add a holiday</h3>
+            <div class="field"><label for="h-date">Date</label><input id="h-date" name="date" type="date" required></div>
+            <div class="field"><label for="h-name">Name</label><input id="h-name" name="name" required minlength="2" maxlength="80" placeholder="e.g. Diwali"></div>
+            <div class="full"><button class="btn btn-primary" type="submit"><i class="ri-add-line"></i>Add holiday</button></div>
+          </form>
+        </div>
+      </section>
 
-                // Fetch rooms count
-                const roomsRes = await fetch('http://localhost:3000/rooms');
-                const rooms = await roomsRes.json();
-                document.getElementById('totalRooms').textContent = rooms.length || 0;
+      <!-- Enquiries -->
+      <section data-view="enquiries" class="hidden">
+        <div class="dash-title"><h1>Enquiries</h1></div>
+        <div class="tabs" role="tablist">
+          <button type="button" class="active" data-enq="new">New</button>
+          <button type="button" data-enq="resolved">Resolved</button>
+          <button type="button" data-enq="">All</button>
+        </div>
+        <div id="enq-list" class="appt-list"></div>
+      </section>
+    </div>
+  </main>
 
-                // Fetch bookings count
-                const bookingsRes = await fetch('http://localhost:3000/bookings');
-                const bookings = await bookingsRes.json();
-                document.getElementById('activeBookings').textContent = bookings.length || 0;
-
-                // Calculate revenue (mock calculation)
-                const revenue = bookings.length * 150;
-                document.getElementById('totalRevenue').textContent = revenue.toLocaleString();
-            } catch (error) {
-                console.error('Error fetching statistics:', error);
-            }
-        }
-    </script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/admin.js"></script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | CityCare Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="login">
+  <div id="site-header"></div>
+
+  <main class="auth-wrap">
+    <section class="auth-side">
+      <h2>Welcome back</h2>
+      <p>One login for patients, doctors and hospital staff.</p>
+      <ul>
+        <li><i class="ri-calendar-check-line"></i>Book, view and cancel appointments</li>
+        <li><i class="ri-file-list-3-line"></i>See diagnoses and prescriptions after each visit</li>
+        <li><i class="ri-printer-line"></i>Print appointment slips</li>
+        <li><i class="ri-shield-keyhole-line"></i>Your data is protected and private</li>
+      </ul>
+    </section>
+
+    <section class="auth-main">
+      <div class="auth-card">
+        <div class="card">
+          <h1 style="font-size:1.7rem">Log in</h1>
+          <p class="muted">Don't have an account? <a id="to-register" href="register.html">Register as a patient</a></p>
+          <form id="login-form" novalidate>
+            <div class="field" style="margin-bottom:14px">
+              <label for="l-email">Email</label>
+              <div class="input-icon"><i class="ri-mail-line"></i><input id="l-email" name="email" type="email" required autocomplete="email"></div>
+            </div>
+            <div class="field" style="margin-bottom:20px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><label for="l-password">Password</label><a class="small" href="forgot-password.html">Forgot password?</a></div>
+              <div class="input-icon">
+                <i class="ri-lock-line"></i>
+                <input id="l-password" name="password" type="password" required autocomplete="current-password">
+                <button type="button" class="pw-toggle" data-pw-toggle aria-label="Show password"><i class="ri-eye-line"></i></button>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block btn-lg" type="submit">Log in</button>
+          </form>
+          <!-- Demo accounts are shown by auth.js only when running on localhost. -->
+          <div id="demo-slot"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

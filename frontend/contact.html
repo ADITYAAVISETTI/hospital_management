@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us &amp; Visiting Hours | CityCare Hospital</title>
+  <meta name="description" content="Contact CityCare Hospital: address, phone numbers, emergency, visiting hours and enquiry form.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="contact">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Home</a> / Contact</div>
+        <h1>Contact Us</h1>
+        <p>We're here to help, whether it's an appointment, a question about a treatment, or feedback about your visit.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid grid-3" style="margin-bottom:40px">
+          <div class="card">
+            <span class="feature-icon" style="background:var(--danger-50);color:var(--danger)"><i class="ri-alarm-warning-line"></i></span>
+            <h3 style="margin-top:14px">Emergency (24x7)</h3>
+            <p class="muted">Ambulance: <a href="tel:108"><strong>108</strong></a><br>Emergency desk: <a id="c-emergency" href="#"></a></p>
+          </div>
+          <div class="card">
+            <span class="feature-icon"><i class="ri-phone-line"></i></span>
+            <h3 style="margin-top:14px">Appointments &amp; enquiries</h3>
+            <p class="muted">Phone: <a id="c-phone" href="#"></a><br>Email: <a id="c-email" href="#"></a></p>
+          </div>
+          <div class="card">
+            <span class="feature-icon"><i class="ri-map-pin-line"></i></span>
+            <h3 style="margin-top:14px">Address</h3>
+            <p class="muted" id="c-address"></p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:40px;padding:0;overflow:hidden">
+          <iframe id="c-map" class="map-embed" title="Map showing CityCare Hospital location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;flex-wrap:wrap">
+            <span class="small"><i class="ri-map-pin-line"></i> <span id="c-map-address"></span></span>
+            <a class="btn btn-outline btn-sm" id="c-directions" target="_blank" rel="noopener"><i class="ri-direction-line"></i>Get directions</a>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="card">
+            <h2>Send us a message</h2>
+            <p class="muted">We usually reply within one working day. Please don't include urgent medical questions here. Call us instead.</p>
+            <form id="enquiry-form" class="form-grid" novalidate>
+              <div class="field">
+                <label for="e-name">Full name <span class="req">*</span></label>
+                <input id="e-name" name="name" required minlength="2" maxlength="80" autocomplete="name">
+              </div>
+              <div class="field">
+                <label for="e-email">Email <span class="req">*</span></label>
+                <input id="e-email" name="email" type="email" required autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="e-phone">Phone</label>
+                <input id="e-phone" name="phone" type="tel" autocomplete="tel" placeholder="+91 …">
+              </div>
+              <div class="field">
+                <label for="e-subject">Subject <span class="req">*</span></label>
+                <select id="e-subject" name="subject" required>
+                  <option value="">Select a topic</option>
+                  <option>Appointment help</option>
+                  <option>Health check-up packages</option>
+                  <option>Insurance &amp; billing</option>
+                  <option>Medical records</option>
+                  <option>Feedback / complaint</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="e-message">Message <span class="req">*</span></label>
+                <textarea id="e-message" name="message" required minlength="10" maxlength="2000"></textarea>
+              </div>
+              <div class="full">
+                <button class="btn btn-primary" type="submit"><i class="ri-send-plane-line"></i>Send message</button>
+              </div>
+            </form>
+          </div>
+
+          <aside>
+            <div class="card" id="visiting">
+              <h3><i class="ri-time-line"></i> Hours</h3>
+              <ul class="info-list">
+                <li><span class="label">Outpatient (OPD)</span><span>Mon–Sat<br>9:00 AM – 7:00 PM</span></li>
+                <li><span class="label">Emergency</span><span>24 hours, all days</span></li>
+                <li><span class="label">Pharmacy</span><span>24 hours, all days</span></li>
+                <li><span class="label">Laboratory</span><span>7:00 AM – 9:00 PM</span></li>
+              </ul>
+            </div>
+            <div class="card" style="margin-top:20px">
+              <h3><i class="ri-group-line"></i> Visiting hours</h3>
+              <ul class="info-list">
+                <li><span class="label">Wards</span><span>11:00 AM – 1:00 PM<br>5:00 PM – 7:00 PM</span></li>
+                <li><span class="label">ICU</span><span>5:00 PM – 6:00 PM<br>(one visitor at a time)</span></li>
+              </ul>
+              <p class="muted small mb-0">Children under 12 are not permitted in the ICU. Please carry the visitor pass issued at admission.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/contact.js"></script>
+</body>
+</html>

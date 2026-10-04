@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Health Portal | CityCare Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="portal">
+  <div id="site-header"></div>
+
+  <main class="dash">
+    <nav class="dash-nav" aria-label="Portal sections">
+      <div class="dash-user" id="dash-user"></div>
+      <button type="button" data-tab="overview" class="active"><i class="ri-dashboard-line"></i>Overview</button>
+      <button type="button" data-tab="appointments"><i class="ri-calendar-2-line"></i>Appointments</button>
+      <button type="button" data-tab="records"><i class="ri-file-list-3-line"></i>Medical records</button>
+      <button type="button" data-tab="reports"><i class="ri-file-pdf-2-line"></i>Reports</button>
+      <button type="button" data-tab="checkups"><i class="ri-heart-pulse-line"></i>Health check-ups</button>
+      <button type="button" data-tab="family"><i class="ri-team-line"></i>Family</button>
+      <button type="button" data-tab="profile"><i class="ri-user-settings-line"></i>My profile</button>
+      <button type="button" data-tab="security"><i class="ri-lock-password-line"></i>Password</button>
+    </nav>
+
+    <div class="dash-main">
+      <section data-view="overview"></section>
+      <section data-view="appointments" class="hidden">
+        <div class="dash-title">
+          <h1>My appointments</h1>
+          <a class="btn btn-primary" href="book.html"><i class="ri-add-line"></i>Book new</a>
+        </div>
+        <div class="tabs" role="tablist">
+          <button type="button" class="active" data-filter="upcoming">Upcoming</button>
+          <button type="button" data-filter="past">Past</button>
+          <button type="button" data-filter="cancelled">Cancelled</button>
+        </div>
+        <div id="appt-list" class="appt-list"></div>
+      </section>
+      <section data-view="records" class="hidden">
+        <div class="dash-title"><h1>Medical records</h1></div>
+        <p class="muted">Diagnoses and prescriptions recorded by your doctors after each consultation.</p>
+        <div id="records-list" class="appt-list"></div>
+      </section>
+      <section data-view="reports" class="hidden">
+        <div class="dash-title"><h1>Reports</h1></div>
+        <p class="muted">Lab results, scans and other documents uploaded by the hospital for you and your family.</p>
+        <div class="card" id="reports-list"></div>
+      </section>
+      <section data-view="checkups" class="hidden">
+        <div class="dash-title"><h1>Health check-ups</h1><a class="btn btn-primary" href="packages.html"><i class="ri-add-line"></i>Book a check-up</a></div>
+        <div id="checkup-list" class="appt-list"></div>
+      </section>
+      <section data-view="family" class="hidden">
+        <div class="dash-title"><h1>Family members</h1><button type="button" class="btn btn-primary" id="add-member"><i class="ri-user-add-line"></i>Add family member</button></div>
+        <p class="muted">Add children, parents or others you manage. You can book appointments and check-ups for them, and see their records here.</p>
+        <div id="family-list" class="grid grid-3"></div>
+      </section>
+      <section data-view="profile" class="hidden">
+        <div class="dash-title"><h1>My profile</h1></div>
+        <div class="card" style="max-width:760px">
+          <form id="profile-form" class="form-grid" novalidate>
+            <div class="field full"><label for="p-name">Full name <span class="req">*</span></label><input id="p-name" name="name" required minlength="2" maxlength="80"></div>
+            <div class="field"><label for="p-email">Email</label><input id="p-email" type="email" disabled><span class="hint">Contact the hospital to change your email.</span></div>
+            <div class="field"><label for="p-phone">Mobile number <span class="req">*</span></label><input id="p-phone" name="phone" type="tel" required pattern="[+\d][\d\s\-]{6,18}"></div>
+            <div class="field"><label for="p-dob">Date of birth</label><input id="p-dob" name="dateOfBirth" type="date"></div>
+            <div class="field"><label for="p-gender">Gender</label>
+              <select id="p-gender" name="gender"><option value="">Prefer not to say</option><option value="female">Female</option><option value="male">Male</option><option value="other">Other</option></select></div>
+            <div class="field"><label for="p-blood">Blood group</label>
+              <select id="p-blood" name="bloodGroup"><option value="">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+            <div class="field"><label>UHID</label><input id="p-uhid" disabled></div>
+            <div class="field full"><label for="p-address">Address</label><textarea id="p-address" name="address" maxlength="300" rows="2"></textarea></div>
+            <div class="full"><button class="btn btn-primary" type="submit"><i class="ri-save-line"></i>Save changes</button></div>
+          </form>
+        </div>
+      </section>
+      <section data-view="security" class="hidden">
+        <div class="dash-title"><h1>Change password</h1></div>
+        <div class="card" style="max-width:480px">
+          <form id="password-form" novalidate>
+            <div class="field" style="margin-bottom:14px"><label for="pw-current">Current password</label><input id="pw-current" name="currentPassword" type="password" required autocomplete="current-password"></div>
+            <div class="field" style="margin-bottom:14px"><label for="pw-new">New password</label><input id="pw-new" name="newPassword" type="password" required minlength="8" pattern="(?=.*[A-Za-z])(?=.*\d).{8,64}" autocomplete="new-password"><span class="hint">At least 8 characters with a letter and a number.</span></div>
+            <div class="field" style="margin-bottom:20px"><label for="pw-confirm">Confirm new password</label><input id="pw-confirm" name="confirm" type="password" required autocomplete="new-password"></div>
+            <button class="btn btn-primary" type="submit">Update password</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/portal.js"></script>
+</body>
+</html>

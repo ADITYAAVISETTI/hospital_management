@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | CityCare Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="register">
+  <div id="site-header"></div>
+
+  <main class="auth-wrap">
+    <section class="auth-side">
+      <h2>Create your patient account</h2>
+      <p>Registration is free and takes a minute. You'll get a Unique Health ID (UHID) that links all your visits.</p>
+      <ul>
+        <li><i class="ri-flashlight-line"></i>Book appointments in seconds</li>
+        <li><i class="ri-history-line"></i>Keep your visit history in one place</li>
+        <li><i class="ri-capsule-line"></i>Access prescriptions any time</li>
+      </ul>
+    </section>
+
+    <section class="auth-main">
+      <div class="auth-card" style="max-width:560px">
+        <div class="card">
+          <h1 style="font-size:1.7rem">Register</h1>
+          <p class="muted">Already registered? <a id="to-login" href="login.html">Log in</a></p>
+          <form id="register-form" class="form-grid" novalidate>
+            <div class="field full">
+              <label for="r-name">Full name <span class="req">*</span></label>
+              <input id="r-name" name="name" required minlength="2" maxlength="80" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="r-email">Email <span class="req">*</span></label>
+              <input id="r-email" name="email" type="email" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="r-phone">Mobile number <span class="req">*</span></label>
+              <input id="r-phone" name="phone" type="tel" required pattern="[+\d][\d\s\-]{6,18}" autocomplete="tel" placeholder="+91 98765 43210">
+            </div>
+            <div class="field">
+              <label for="r-dob">Date of birth</label>
+              <input id="r-dob" name="dateOfBirth" type="date">
+            </div>
+            <div class="field">
+              <label for="r-gender">Gender</label>
+              <select id="r-gender" name="gender">
+                <option value="">Prefer not to say</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="r-password">Password <span class="req">*</span></label>
+              <div class="input-icon">
+                <i class="ri-lock-line"></i>
+                <input id="r-password" name="password" type="password" required minlength="8" maxlength="64" pattern="(?=.*[A-Za-z])(?=.*\d).{8,64}" autocomplete="new-password">
+                <button type="button" class="pw-toggle" data-pw-toggle aria-label="Show password"><i class="ri-eye-line"></i></button>
+              </div>
+              <span class="hint">At least 8 characters, with at least one letter and one number.</span>
+            </div>
+            <div class="field full">
+              <label for="r-password2">Confirm password <span class="req">*</span></label>
+              <input id="r-password2" name="password2" type="password" required autocomplete="new-password">
+            </div>
+            <label class="checkbox full">
+              <input type="checkbox" name="terms" required>
+              <span>I agree to the <a href="terms.html" target="_blank">terms of use</a> and <a href="privacy.html" target="_blank">privacy policy</a>, and consent to my health information being stored for my care.</span>
+            </label>
+            <div class="full">
+              <button class="btn btn-primary btn-block btn-lg" type="submit">Create account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

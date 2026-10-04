@@ -1,79 +1,47 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
-## Project Overview
+## Project
 
-This is a Hotel Management System with separate frontend and backend applications:
-- **Backend**: Node.js/Express API with MongoDB database (located in `backend/`)
-- **Frontend**: Vanilla JavaScript/HTML/CSS application (located in `frontend/`)
+CityCare Multispeciality Hospital website: public pages, online appointment booking, and patient / doctor / admin portals.
 
-## Common Development Commands
+- `backend/`: Node.js, Express 5, MongoDB (Mongoose 8). Serves the API under `/api` **and** the static `frontend/` folder on one port.
+- `frontend/`: plain HTML/CSS/JS, no build step. Every page loads `assets/js/app.js` (shared helpers, header/footer) and then its own page script.
 
-### Backend Commands
+## Commands (run in `backend/`)
+
 ```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
 npm install
-
-# Start development server with nodemon (hot reload)
-npm start
-
-# The backend runs on port 3000 by default
+npm run seed         # sample departments, doctors, demo logins (idempotent)
+npm run seed:reset   # wipe hospital data, then seed
+npm start            # http://localhost:3000
+npm run dev          # nodemon
+npm test             # node:test suites (tests/*.test.js), use CityCareHospital_test / _test2 DBs
 ```
 
-### Frontend Commands
-The frontend is a static site - open `frontend/index.html` directly in a browser or serve with any static file server.
+`backend/.env` needs `DB_CONNECT`, `TOKEN_SECRET`, `PORT` (see README). `TOKEN_SECRET` is required outside tests.
 
-## Architecture Overview
+## Architecture notes
 
-### Backend Structure
-- **Entry Point**: `index.js` - Configures Express server with CORS, connects to MongoDB, and sets up routes
-- **Database**: MongoDB connection via Mongoose, database name: `HotelManagement`
-- **Authentication**: JWT-based authentication with bcrypt password hashing
-- **API Routes**:
-  - `/api/user/register` - User registration
-  - `/api/user/login` - User login
-  - `/bookings` - CRUD operations for bookings
-  - `/rooms` - Room management endpoints
-  - `/hotel` - Hotel management endpoints
-  - `/api/posts` - Protected posts route
+- Roles: `patient` (public sign-up, front-desk registration, or a family member with `guardian` set and no email/password), `doctor` (created by admin, linked 1:1 to a `Doctor` profile), `admin` (seed script).
+- Auth: JWT in `Authorization: Bearer`, 7-day expiry; `middleware/auth.js` reloads the user on every request. `requireRole(...)` guards routes.
+- Validation: Joi via `middleware/validate.js` (synchronous; query results land in `req.validQuery` because `req.query` is read-only in Express 5).
+- Errors: throw `HttpError` helpers from `utils/httpError.js`; `errorHandler` turns everything (incl. Mongo duplicate keys) into JSON `{ message }`. Express 5 forwards async errors, so no try/catch wrappers are needed.
+- Dates are `YYYY-MM-DD` strings and times `HH:MM` strings in server-local time (`utils/time.js`). Slots come from `Doctor.schedule` (weekly windows) and `slotMinutes`.
+- Double booking is prevented by a unique partial index on `Appointment {doctor, date, time}` where `holdsSlot: true`; cancelling sets `holdsSlot: false`.
+- Doctors are deactivated, never deleted (DELETE sets `active: false` and cancels their future appointments).
+- Patients never receive `doctorNotes`; public doctor data never includes email/phone or leave reasons.
+- All booking paths (patient, family, front desk, reschedule) go through `services/booking.js` (`assertBookable`: window, past, holiday, leave, schedule, patient clashes). Appointment `account` = the login that manages it (guardian for family members).
+- Emails: `utils/mailer.js` (SMTP if `SMTP_HOST` set, else printed to console; `outbox` in tests). Send from routes via `notify(fn, ...)` so failures never break requests or crash the process. Reminder job in `services/notifications.js` runs from `server.js` only.
+- Uploads are base64 JSON checked by magic bytes (`utils/files.js`). Doctor photos are public under `/uploads/doctors`; reports are private and only served via `GET /api/reports/:id/file` after a permission check.
+- Time zone: `config.js` sets `process.env.TZ` from `HOSPITAL_TZ` (default Asia/Kolkata) before any Date use.
 
-### Key Backend Components
-- **Models** (`model/`): Mongoose schemas for User, Hotel, Booking, and Rooms
-- **Controllers** (`controllers/`): Business logic for bookings, hotels, and rooms
-- **Routes** (`routes/`): Express routers defining API endpoints
-- **Validation**: Joi-based validation in `validation.js` for user registration/login
-- **Middleware**: JWT verification in `routes/verifyToken.js` for protected routes
+## Frontend conventions
 
-### Frontend Structure
-- **Pages**: Separate HTML files for different functionalities (index, admin, hotel, rooms, booking, user)
-- **JavaScript**: Individual JS files for each page handling API interactions
-- **Styling**: CSS in `assets/css/styles.css`
-- **API Integration**: Frontend makes requests to `http://localhost:3000` backend
-
-## Environment Configuration
-
-Create a `.env` file in the backend directory with:
-```
-DB_CONNECT=mongodb://127.0.0.1:27017/HotelManagement
-TOKEN_SECRET=your_secret_key_here
-PORT=3000
-```
-
-## Database Schema
-
-- **User**: name, email, password (hashed), role
-- **Hotel**: area, Name_of_the_Hotel, Amenties, Location
-- **Booking**: Contains booking details (schema in `model/booking.js`)
-- **Room**: Room information (schema in `model/rooms.js`)
-
-## Development Notes
-
-- CORS is enabled on the backend to allow frontend requests
-- Authentication uses JWT tokens stored in the TOKEN_SECRET environment variable
-- The backend uses nodemon for development hot reloading
-- MongoDB must be running locally on port 27017
-- User roles are required during registration but validation needs adjustment in `validation.js`
+- Always escape server/user data with `esc()` before inserting into HTML.
+- No inline `onclick` / `<script>`: the helmet CSP (`app.js` in backend) blocks them. Bind with `addEventListener`.
+- When editing JS via shell commands, beware `$$` (the `$$()` helper) being expanded to a process id by bash inside double quotes; prefer the Edit tool.
+- Use `downloadFile()` for protected files, `patientReportsModal()` for reports, `avatar(name, size, photo)` and `starsHtml()`.
+- Use `api()` for requests (handles token, JSON errors, expired sessions), `toast()`, `openModal()`, `confirmDialog()`, `withLoading()`, `validateForm()`.
+- Hospital name and contact details live in `SITE` in `frontend/assets/js/app.js`.
