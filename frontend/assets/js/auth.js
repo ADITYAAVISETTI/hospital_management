@@ -13,7 +13,7 @@ function afterLogin(user) {
 document.addEventListener('DOMContentLoaded', () => {
   initPasswordToggles();
   initForgotAndReset();
-  showDemoAccountsLocally();
+  showDemoAccounts();
 
   // Already logged in? Skip the login/register form.
   const page = document.body.dataset.page;
@@ -135,12 +135,11 @@ function initForgotAndReset() {
   }
 }
 
-// Demo logins help during development only. They are never part of the page on
-// the live site (not even hidden), and the live database has no demo accounts.
-function showDemoAccountsLocally() {
+// Demo logins are shown on every site (including the live one) so visitors can
+// try the project. Anyone can use them, so remove this for a real hospital.
+function showDemoAccounts() {
   const slot = $('#demo-slot');
-  const local = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(location.hostname) || location.protocol === 'file:';
-  if (!slot || !local) return;
+  if (!slot) return;
   slot.innerHTML = `
     <details class="demo-logins">
       <summary>Demo accounts (after running <code>npm run seed</code>)</summary>
